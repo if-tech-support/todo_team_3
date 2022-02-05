@@ -76,3 +76,4 @@ issue#３ Todo の作成画面の実装の場合
 
 例）
 `git commit -m '#3 Todo作成画面の要素を追加し、レイアウト調整' `
+test
