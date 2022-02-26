@@ -1,30 +1,6 @@
 import { Box, Container, Input, Select, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { todosState } from "../atoms/atom";
 
-const Search = ({ setPriority }) => {
-  // const handleSearchPriority = (e) => {
-  //   setPriority(e.target.value);
-  //   console.log(e)
-
-  //   setSearchTodos(todos.filter((todo) => {
-  //     return todo.priority === priority;
-  //   }));
-  // }
-
-  // useEffect(() => {
-  //   const newTodos = todos.filter((todo) => {
-  //     return todo.priority === priority
-  //   })
-
-  //   setSearchTodos(newTodos);
-
-  // }, [priority, todos])
-
-  // useEffect(() => {
-  //   console.log(searchTodos)
-  // }, [searchTodos])
+const Search = ({ setStatus, setPriority }) => {
 
   return (
     <Container m='0' mt='10' p='3' bg='gray.100' borderRadius='10px'  display='flex' justifyContent='space-around' alignItems='center'>
@@ -35,7 +11,11 @@ const Search = ({ setPriority }) => {
 
       <Box>
         <Text textAlign='center'>ステータス</Text>
-        <Select placeholder='すべて'>
+        <Select
+          defaultValue={'すべて'}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <option value='すべて'>すべて</option>
           <option value='着手前'>着手前</option>
           <option value='進行中'>進行中</option>
           <option value='完了'>完了</option>

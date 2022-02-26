@@ -9,23 +9,35 @@ import TodoList from './components/TodoList'
 import Search from './components/Search'
 import Link from 'next/link'
 
-
 export default function Home() {
   const todos = useRecoilValue(todosState);
   const [priority, setPriority] = useState("すべて");
+  const [status, setStatus] = useState("すべて");
   const [searchTodos, setSearchTodos] = useState([]);
 
   useEffect(() => {
-    if (priority === "すべて") {
+    if (priority === "すべて" && status === "すべて") {
       setSearchTodos(null);
     } else {
       setSearchTodos(
         todos.filter((todo) => {
-          return todo.priority === priority;
+          return todo.priority === priority || todo.status === status ? true : false;
         })
       )
     }
-  }, [priority, todos])
+  }, [status, priority, todos])
+
+  // useEffect(() => {
+  //   if (priority === "すべて") {
+  //     setSearchTodos(null);
+  //   } else {
+  //     setSearchTodos(
+  //      // todos.filter((todo) => {
+  //         return todo.priority === priority
+  //       })
+  //     )
+  //   }
+  // }, [priority, todos])
 
   return (
     <>
@@ -45,11 +57,12 @@ export default function Home() {
           </Text>
 
           <Search
+            setStatus={setStatus}
             setPriority={setPriority}
           />
 
           <Box mt='10' mr='5' textAlign='right'>
-            <Link href="./addtask" passHref>
+            <Link href="/addtask" passHref>
               <Button>
                 <AddIcon mr='2' />
                 タスクを追加
