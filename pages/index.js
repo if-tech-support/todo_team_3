@@ -1,5 +1,6 @@
 import Head from 'next/head'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useState, useEffect } from 'react'
+import { useRecoilValue } from 'recoil'
 import { Box, Button, Container, Heading, Text} from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 
@@ -8,9 +9,23 @@ import TodoList from './components/TodoList'
 import Search from './components/Search'
 import Link from 'next/link'
 
+
 export default function Home() {
   const todos = useRecoilValue(todosState);
-  // console.log("現在のTodos：",todos);
+  const [priority, setPriority] = useState("すべて");
+  const [searchTodos, setSearchTodos] = useState([]);
+
+  useEffect(() => {
+    if (priority === "すべて") {
+      setSearchTodos(null);
+    } else {
+      setSearchTodos(
+        todos.filter((todo) => {
+          return todo.priority === priority;
+        })
+      )
+    }
+  }, [priority, todos])
 
   return (
     <>
@@ -29,18 +44,22 @@ export default function Home() {
             {todos.length >= 1 ? `タスクは${todos.length}個あります` : '現在タスクはありません'}
           </Text>
 
-          <Search />
+          <Search
+            setPriority={setPriority}
+          />
 
           <Box mt='10' mr='5' textAlign='right'>
-            <Link href="./addtask">
-            <Button>
-              <AddIcon mr='2' />
-              タスクを追加
-            </Button>
+            <Link href="./addtask" passHref>
+              <Button>
+                <AddIcon mr='2' />
+                タスクを追加
+              </Button>
             </Link>
           </Box>
 
-          <TodoList />
+          <TodoList
+            searchTodos={searchTodos}
+          />
         </Container>
       </Container>
     </>

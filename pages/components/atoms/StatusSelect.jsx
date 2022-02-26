@@ -29,7 +29,7 @@ const StatusSelect = ({ todo }) => {
       <select
         value={todo.status}
         onChange={(e) => handleSetNewStatus(todo.id, e.target.value)}
-        style={{ outline: "none" }}
+        style={{ outline: "none", textAlign: "center" }}
       >
         <option value="着手前">着手前</option>
         <option value="進行中">進行中</option>
