@@ -1,12 +1,14 @@
 import { Box, Container, Input, Select, Text } from "@chakra-ui/react";
 
-const Search = ({ setStatus, setPriority }) => {
+const Search = ({ setStatus, setPriority, setInputFilter }) => {
 
   return (
     <Container m='0' mt='10' p='3' bg='gray.100' borderRadius='10px'  display='flex' justifyContent='space-around' alignItems='center'>
       <Box>
         <Text textAlign='center'>キーワード</Text>
-        <Input placeholder='キーワードを入力'/>
+        <Input placeholder='キーワードを入力'
+          onChange={(e) => setInputFilter(e.target.value)}
+        />
       </Box>
 
       <Box>

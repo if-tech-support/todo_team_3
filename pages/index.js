@@ -13,31 +13,39 @@ export default function Home() {
   const todos = useRecoilValue(todosState);
   const [priority, setPriority] = useState("すべて");
   const [status, setStatus] = useState("すべて");
+  const [inputFilter, setInputFilter] = useState(null);
   const [searchTodos, setSearchTodos] = useState([]);
 
   useEffect(() => {
     if (priority === "すべて" && status === "すべて") {
       setSearchTodos(null);
     } else {
-      setSearchTodos(
-        todos.filter((todo) => {
-          return todo.priority === priority || todo.status === status ? true : false;
-        })
-      )
+      if (priority !== "すべて" && status !== "すべて") {
+        setSearchTodos(
+          todos.filter((todo) => {
+            return todo.priority === priority && todo.status === status ? true : false;
+          })
+        )
+      } else  {
+        setSearchTodos(
+          todos.filter((todo) => {
+            return todo.priority === priority || todo.status === status ? true : false;
+          })
+        )
+      }
     }
   }, [status, priority, todos])
 
-  // useEffect(() => {
-  //   if (priority === "すべて") {
-  //     setSearchTodos(null);
-  //   } else {
-  //     setSearchTodos(
-  //      // todos.filter((todo) => {
-  //         return todo.priority === priority
-  //       })
-  //     )
-  //   }
-  // }, [priority, todos])
+  useEffect(() => {
+    if (inputFilter) {
+      const filterList = todos.filter((todo) => (
+        todo.title.toString().indexOf(inputFilter) >= 0
+      ));
+      setSearchTodos(filterList);
+    } else {
+      setSearchTodos(null);
+    }
+  }, [todos, inputFilter])
 
   return (
     <>
@@ -59,6 +67,7 @@ export default function Home() {
           <Search
             setStatus={setStatus}
             setPriority={setPriority}
+            setInputFilter={setInputFilter}
           />
 
           <Box mt='10' mr='5' textAlign='right'>
