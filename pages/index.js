@@ -17,7 +17,7 @@ export default function Home() {
   const [searchTodos, setSearchTodos] = useState([]);
 
   useEffect(() => {
-    if (priority === "すべて" && status === "すべて") {
+    if (priority === "すべて" && status === "すべて" && !inputFilter) {
       setSearchTodos(null);
     } else {
       if (priority !== "すべて" && status !== "すべて") {
@@ -33,19 +33,15 @@ export default function Home() {
           })
         )
       }
-    }
-  }, [status, priority, todos])
 
-  useEffect(() => {
-    if (inputFilter) {
-      const filterList = todos.filter((todo) => (
-        todo.title.toString().indexOf(inputFilter) >= 0
-      ));
-      setSearchTodos(filterList);
-    } else {
-      setSearchTodos(null);
+      if (inputFilter) {
+        const filterList = todos.filter((todo) => (
+          todo.title.toString().indexOf(inputFilter) >= 0
+        ));
+        setSearchTodos(filterList);
+      }
     }
-  }, [todos, inputFilter])
+  }, [status, priority, inputFilter, todos])
 
   return (
     <>
