@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { Box, CircularProgress} from "@chakra-ui/react";
+import { Box, Button, CircularProgress} from "@chakra-ui/react";
 
 import { todosState } from "../../atoms/atom";
 import Border from "../../components/atoms/Border";
@@ -13,13 +13,22 @@ import Task from "../../components/organisms/layout/Task";
 
 const edittask = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { query, isReady } = useRouter()
+  const router = useRouter()
+  const {query, isReady} = router;
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const todos = useRecoilValue(todosState)
+  const [todos, setTodos] = useRecoilState(todosState)
     
   const editTodo = todos.filter((todo) => {
     return todo.id === Number(query.id);
   })
+
+  const handleClickDelete = () => {
+    if(confirm("下記ToDoを削除しますか？")){
+      const newTodos = todos.filter((todo) => todo.id !== Number(query.id));   
+      setTodos(newTodos);
+    router.push("/");
+    }
+  };
 
   if (!isReady) {
     return (
@@ -57,12 +66,11 @@ const edittask = () => {
       <Priority />
       <Border />
       <Box pos="absolute" bottom="8" right="0">
-        <UserButton
+      <Button
           colorScheme={"red"}
-          color={"#FFFFFF"}
-          text={"削除"}
           mr={"28px"}
-        />
+          onClick={handleClickDelete}
+        >削除</Button>
         <UserButton
           colorScheme={"teal"}
           color={"#FFFFFF"}

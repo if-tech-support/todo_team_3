@@ -67,11 +67,11 @@ export default function Home() {
           />
 
           <Box mt='10' mr='5' textAlign='right'>
-            <Link href="/addtask" passHref>
-              <Button>
-                <AddIcon mr='2' />
-                タスクを追加
-              </Button>
+            <Link href="/addtask">
+            <Button>
+              <AddIcon mr='2' />
+              タスクを追加
+            </Button>
             </Link>
           </Box>
 
