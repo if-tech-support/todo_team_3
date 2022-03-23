@@ -7,19 +7,31 @@ import { todosState } from "../../../atoms/atom";
 const Context = () => {
   const { query } = useRouter();
   const [todos, setTodos] = useRecoilState(todosState);
-    
   const editTodo = todos.filter((todo) => {
     return todo.id === Number(query.id);
   })
 
-  const handleChange = (e) => {
-    setTodos(todos.map((todo) => {
-      if (todo.id === editTodo[0]?.id) {
-        return todo.title = e.target.value;
-      }
-    }))
-  }
+  const handleEditContext = (text) => {
+    const foundTodo = todos.findIndex((todo) => todo.id === editTodo[0]?.id);
 
+    const replaceItemAtIndex = (todos, foundTodo, newValue) => {
+      return [
+        ...todos.slice(0, foundTodo),
+        newValue,
+        ...todos.slice(foundTodo + 1),
+      ];
+    };
+    setTodos(() => {
+      if (todos[foundTodo].text) {
+        return replaceItemAtIndex(todos, foundTodo, {
+          ...todos[foundTodo],
+          text: text,
+        });
+      }
+    });
+  };
+
+  
   return (
     <>
       <HStack spacing="24px">
@@ -35,7 +47,7 @@ const Context = () => {
             borderColor="#bebaba"
             borderWidth="2px"
             value={editTodo[0]?.text}
-            onChange={handleChange}
+            onChange={(e)=>handleEditContext(e.target.value)}
           />
         </Box>
       </HStack>

@@ -13,18 +13,13 @@ import {
 
 import { todosState } from '../atoms/atom';
 import UserButton from './atoms/Button';
+import useDelete from '../../src/hooks/useDelete';
+import BackToTopButton from './atoms/BackToTopButton';
 
 export default function Detail() {
   const router = useRouter();
   const [todos, setTodos] = useRecoilState(todosState);
-
-  const handleClickDelete = () => {
-    if(confirm("下記ToDoを削除しますか？")){
-      const newTodos = todos.filter((todo) => todo.id !== Number(router.query.id));   
-      setTodos(newTodos);
-    router.push("/");
-    }
-  };
+  const handleClickDelete = useDelete();
   
   const todo = todos.filter((todo) => {
     return todo.id === Number(router.query.id)
@@ -82,13 +77,7 @@ export default function Detail() {
           mr={"28px"}
           onClick={handleClickDelete}
         >削除</Button>
-        <UserButton
-          colorScheme={"teal"}
-          color={"#FFFFFF"}
-          text={"戻る"}
-          mr={"16px"}
-          url={"/"}
-        />
+        <BackToTopButton />
         </Flex>
       </Container>
     </>

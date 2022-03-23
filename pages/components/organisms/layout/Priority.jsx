@@ -12,13 +12,25 @@ const Priority = () => {
     return todo.id === Number(query.id);
   })
 
-  const handleChange = (e) => {
-    setTodos(todos.map((todo) => {
-      if (todo.id === editTodo[0]?.id) {
-        return todo.title = e.target.value;
+  const hadleEditPriority = (priority) => {
+    const foundTodo = todos.findIndex((todo) => todo.id === editTodo[0]?.id);
+
+    const replaceItemAtIndex = (todos, foundTodo, newValue) => {
+      return [
+        ...todos.slice(0, foundTodo),
+        newValue,
+        ...todos.slice(foundTodo + 1),
+      ];
+    };
+    setTodos(() => {
+      if (todos[foundTodo].priority) {
+        return replaceItemAtIndex(todos, foundTodo, {
+          ...todos[foundTodo],
+          priority: priority,
+        });
       }
-    }))
-  }
+    });
+  };
 
   return (
     <>
@@ -36,7 +48,7 @@ const Priority = () => {
             borderColor="#bebaba"
             borderWidth="2px"
             value={editTodo[0]?.priority}
-            onChange={handleChange}
+            onChange={(e)=>hadleEditPriority(e.target.value)}
           >
             <option value="高">高</option>
             <option value="中">中</option>

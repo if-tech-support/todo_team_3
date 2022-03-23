@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
 import { todosState, idState } from "../atoms/atom";
-import UserButton from "./atoms/Button";
+import BackToTopButton from "./atoms/BackToTopButton";
 
 const NewTodo = () => {
   const router = useRouter();
@@ -137,13 +137,7 @@ const NewTodo = () => {
           <Button colorScheme="blue" color="#FFFFFF" mr="28px" type="submit">
             保存
           </Button>
-          <UserButton
-            colorScheme={"teal"}
-            color={"#FFFFFF"}
-            text={"戻る"}
-            mr={"28px"}
-            url="/"
-          />
+          <BackToTopButton />
         </Box>
       </form>
     </>

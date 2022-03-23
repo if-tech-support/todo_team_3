@@ -35,7 +35,10 @@ export const todosState = atom({
       updateDate: '2022-3-4',
     }
   ],
+  
+  // effects_UNSTABLE:[persistAtom]
 })
+
 
 export const idState = atom({
   key:"id",
