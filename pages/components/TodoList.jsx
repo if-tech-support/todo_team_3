@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { EditIcon } from "@chakra-ui/icons";
 import {
   Button,
   Checkbox,
   Container,
+  HStack,
   Table,
   Tbody,
   Td,
@@ -17,9 +19,22 @@ import {
 import { todosState } from "../atoms/atom";
 import StatusSelect from "./atoms/StatusSelect";
 import PrioritySelect from "./atoms/PrioritySelect";
+import useHandleSortStatus from "../../src/hooks/useHandleSortStatus";
+import useHandleSortPriority from "../../src/hooks/useHandleSortPriority";
+import useHandleSortCreate from "../../src/hooks/useHandleSortCreate";
+import useHandleSortUpdate from "../../src/hooks/useHandleSortUpdate";
 
 const TodoList = ({ searchTodos }) => {
   const todos = useRecoilValue(todosState);
+  const [statusArrow, setStatusArrow] = useState("▲");
+  const [priorityArrow, setPriorityArrow] = useState("▲");
+  const [createArrow, setCreateArrow] = useState("▲");
+  const [updateArrow, setUpdateArrow] = useState("▲");
+
+  const handleSortStatus = useHandleSortStatus();
+  const handleSortPriority = useHandleSortPriority();
+  const handleSortCreate = useHandleSortCreate();
+  const handleSortUpdate = useHandleSortUpdate();
 
   const renderStatus = (todo) => {
     switch (todo.status) {
@@ -60,10 +75,39 @@ const TodoList = ({ searchTodos }) => {
           <Thead bg="gray.100">
             <Tr>
               <Th>タスク名</Th>
-              <Th>ステータス</Th>
-              <Th>優先度</Th>
-              <Th>作成日時</Th>
-              <Th>更新日時</Th>
+              <Th>
+                <HStack>
+                  <Text>ステータス</Text>
+                    <Button colorScheme="yellow" size="xs" variant="outline" onClick={()=>{handleSortStatus(todos, statusArrow, setStatusArrow)}}>
+                      {statusArrow}
+                    </Button>
+                </HStack>
+              </Th>
+              <Th>
+                <HStack>
+                  <Text>優先度</Text>
+                    <Button colorScheme="yellow" size="xs" variant="outline" onClick={() => {handleSortPriority(todos, priorityArrow, setPriorityArrow)}}
+                    >
+                      {priorityArrow}
+                    </Button>
+                </HStack>
+              </Th>
+              <Th>
+                <HStack>
+                  <Text>作成日時</Text>
+                    <Button colorScheme="yellow" size="xs" variant="outline" onClick={()=>{handleSortCreate(todos, createArrow, setCreateArrow)}}>
+                      {createArrow}
+                    </Button>
+                </HStack>
+              </Th>
+              <Th>
+                <HStack>
+                  <Text>更新日時</Text>
+                    <Button colorScheme="yellow" size="xs" variant="outline" onClick={()=>{handleSortUpdate(todos, updateArrow, setUpdateArrow)}}>
+                      {updateArrow}
+                    </Button>
+                </HStack>
+              </Th>
             </Tr>
           </Thead>
 
