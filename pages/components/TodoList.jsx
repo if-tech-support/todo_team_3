@@ -5,7 +5,6 @@ import {
   Box,
   Button,
   Checkbox,
-  Container,
   Flex,
   Table,
   Tbody,
@@ -22,6 +21,10 @@ import { todosState } from "../atoms/atom";
 import StatusSelect from "./atoms/StatusSelect";
 import PrioritySelect from "./atoms/PrioritySelect";
 import useMultipleChecked from "./atoms/useMultipleChecked";
+import useHandleSortStatus from "../../src/hooks/useHandleSortStatus";
+import useHandleSortPriority from "../../src/hooks/useHandleSortPriority";
+import useHandleSortCreate from "../../src/hooks/useHandleSortCreate";
+import useHandleSortUpdate from "../../src/hooks/useHandleSortUpdate";
 
 const TodoList = ({ searchTodos }) => {
   const [todos, setTodos] = useRecoilState(todosState);
@@ -31,6 +34,11 @@ const TodoList = ({ searchTodos }) => {
   const [createArrow, setCreateArrow] = useState("▲");
   const [updateArrow, setUpdateArrow] = useState("▲");
   const buttonSize = useBreakpointValue({ base: "sm", md: "md" });
+
+  const handleSortStatus = useHandleSortStatus();
+  const handleSortPriority = useHandleSortPriority();
+  const handleSortCreate = useHandleSortCreate();
+  const handleSortUpdate = useHandleSortUpdate();
 
   const renderStatus = (todo) => {
     switch (todo.status) {
@@ -76,65 +84,6 @@ const TodoList = ({ searchTodos }) => {
     });
     setTodos(newTodos);
   };
-  const handleSortStatus = (todos) => {
-    const high = todos.filter((todo) => todo.status === "完了");
-    const middle = todos.filter((todo) => todo.status === "進行中");
-    const low = todos.filter((todo) => todo.status === "着手前");
-    if (statusArrow === "▲") {
-      setTodos([...low, ...middle, ...high]);
-      setStatusArrow("▼");
-    } else {
-      setTodos([...high, ...middle, ...low]);
-      setStatusArrow("▲");
-    }
-  };
-
-  const handleSortPriority = (todos) => {
-    const high = todos.filter((todo) => todo.priority === "高");
-    const middle = todos.filter((todo) => todo.priority === "中");
-    const low = todos.filter((todo) => todo.priority === "低");
-    if (priorityArrow === "▲") {
-      setTodos([...low, ...middle, ...high]);
-      setPriorityArrow("▼");
-    } else {
-      setTodos([...high, ...middle, ...low]);
-      setPriorityArrow("▲");
-    }
-  };
-
-  const handleSortCreate = (todos) => {
-    const targetTodos = [...todos];
-    if (createArrow === "▲") {
-      targetTodos.sort((a, b) => {
-        return new Date(a.createDate) - new Date(b.createDate);
-      });
-      setTodos(targetTodos);
-      setCreateArrow("▼");
-    } else {
-      targetTodos.sort((a, b) => {
-        return new Date(b.createDate) - new Date(a.createDate);
-      });
-      setTodos(targetTodos);
-      setCreateArrow("▲");
-    }
-  };
-
-  const handleSortUpdate = (todos) => {
-    const targetTodos = [...todos];
-    if (updateArrow === "▲") {
-      targetTodos.sort((a, b) => {
-        return new Date(a.updateDate) - new Date(b.updateDate);
-      });
-      setTodos(targetTodos);
-      setUpdateArrow("▼");
-    } else {
-      targetTodos.sort((a, b) => {
-        return new Date(b.updateDate) - new Date(a.updateDate);
-      });
-      setTodos(targetTodos);
-      setUpdateArrow("▲");
-    }
-  };
 
   return (
     <>
@@ -177,7 +126,7 @@ const TodoList = ({ searchTodos }) => {
                     size="xs"
                     variant="outline"
                     onClick={() => {
-                      handleSortStatus(todos);
+                      handleSortStatus(todos, statusArrow, setStatusArrow);
                     }}
                   >
                     {statusArrow}
@@ -197,7 +146,7 @@ const TodoList = ({ searchTodos }) => {
                     size="xs"
                     variant="outline"
                     onClick={() => {
-                      handleSortPriority(todos);
+                      handleSortPriority(todos, priorityArrow, setPriorityArrow);
                     }}
                   >
                     {priorityArrow}
@@ -217,7 +166,7 @@ const TodoList = ({ searchTodos }) => {
                     size="xs"
                     variant="outline"
                     onClick={() => {
-                      handleSortCreate(todos);
+                      handleSortCreate(todos, createArrow, setCreateArrow);
                     }}
                   >
                     {createArrow}
@@ -237,7 +186,7 @@ const TodoList = ({ searchTodos }) => {
                     size="xs"
                     variant="outline"
                     onClick={() => {
-                      handleSortUpdate(todos);
+                      handleSortUpdate(todos, updateArrow, setUpdateArrow);
                     }}
                   >
                     {updateArrow}
@@ -343,10 +292,10 @@ const TodoList = ({ searchTodos }) => {
                       <PrioritySelect todo={todo} />
                     </Td>
                     <Td px={[1, 2]} py={[2, 3]} fontSize={["14px", "16px"]}>
-                      <Box lineHeight="1.4">{todo.updateDate}</Box>
+                      <Box lineHeight="1.4">{todo.createDate}</Box>
                     </Td>
                     <Td px={[1, 2]} py={[2, 3]} fontSize={["14px", "16px"]}>
-                      <Box lineHeight="1.4">{todo.createDate}</Box>
+                      <Box lineHeight="1.4">{todo.updateDate}</Box>
                     </Td>
                   </Tr>
                 ))}
